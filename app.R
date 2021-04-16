@@ -6,6 +6,7 @@ library(lubridate)
 library(httr)
 library(ggplot2)
 library(DT)
+library(scales)
 
 #importing dataset
 data <- read_csv("http://opendata.ecdc.europa.eu/covid19/casedistribution/csv")
@@ -13,6 +14,9 @@ data <- read_csv("http://opendata.ecdc.europa.eu/covid19/casedistribution/csv")
 data$date_reported <- mdy(paste0(data$month,"-", data$day,"-",data$year))
 data<-data %>% rename(date=date_reported, country=countryterritoryCode, `cases_per_100000`=`Cumulative_number_for_14_days_of_COVID-19_cases_per_100000`)
 data <- data[order(data$country),]
+continent <- data %>% 
+  group_by(continentExp) %>% 
+  summarise(deaths = sum(deaths), cases= sum(cases))
 source("function.R", local = T)
 
 
